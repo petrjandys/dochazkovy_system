@@ -51,20 +51,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SQLiteHelper.cs" />
-    <Compile Include="userReg.cs">
+    <Compile Include="Registrace_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="userReg.Designer.cs">
-      <DependentUpon>userReg.cs</DependentUpon>
+    <Compile Include="Registrace_Form.Designer.cs">
+      <DependentUpon>Registrace_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Vypis_Form.cs">
       <SubType>Form</SubType>
@@ -72,8 +71,14 @@
     <Compile Include="Vypis_Form.Designer.cs">
       <DependentUpon>Vypis_Form.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Vypis_uzivatelu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Vypis_uzivatelu.Designer.cs">
+      <DependentUpon>Vypis_uzivatelu.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -84,11 +89,14 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="userReg.resx">
-      <DependentUpon>userReg.cs</DependentUpon>
+    <EmbeddedResource Include="Registrace_Form.resx">
+      <DependentUpon>Registrace_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Vypis_Form.resx">
       <DependentUpon>Vypis_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Vypis_uzivatelu.resx">
+      <DependentUpon>Vypis_uzivatelu.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

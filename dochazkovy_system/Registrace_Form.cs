@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Data.SQLite;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace dochazkovy_system
 {
-    public partial class userReg : Form
+    public partial class Registrace_Form : Form
     {
         private SQLiteConnection sqliteConnection;
 
-        public userReg()
+        public Registrace_Form()
         {
             InitializeComponent();
             sqliteConnection = new SQLiteConnection("Data Source=dochazkovy_system.db;Version=3;");
@@ -102,17 +103,68 @@ namespace dochazkovy_system
         {
             string firstName = jmeno_textbox.Text;
             string lastName = prijmeni_textbox.Text;
-            decimal hourlyRate = Convert.ToDecimal(hodinovka_textbox.Text);
-            string position = prac_pozice_textbox.Text;
+            string hourlyRateText = hodinovka_textbox.Text.Replace('.', ',');
 
-            InsertEmployee(firstName, lastName, hourlyRate, position);
+            if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName) || string.IsNullOrWhiteSpace(hourlyRateText))
+            {
+                MessageBox.Show("Prosím, vyplňte všechna pole", "Chyba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; 
+            }
 
-            MessageBox.Show("Employee registered successfully!");
-        }     
+            decimal hourlyRate;
+            if (decimal.TryParse(hourlyRateText, out hourlyRate))
+            {
+                string position = prac_pozice_textbox.Text;
+
+                InsertEmployee(firstName, lastName, hourlyRate, position);
+                jmeno_textbox.Text = "";
+                prijmeni_textbox.Text = "";
+                hodinovka_textbox.Text = "";
+                prac_pozice_textbox.Text = "";
+                MessageBox.Show($"Zaměstnanec {firstName} {lastName} úspěšně přidán");
+            }
+            else
+            {
+                MessageBox.Show("Zadej číslo", "Chyba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             base.OnFormClosed(e);
             sqliteConnection.Close();
         }
+
+        private void zpetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MainForm form1 = new MainForm(); 
+            form1.Show(); 
+            this.Hide(); 
+        }
+
+        private void zavritToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void userReg_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void hodinovka_textbox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.') && (e.KeyChar != ','))
+            {
+                e.Handled = true;
+            }
+            else if ((e.KeyChar == '.' || e.KeyChar == ',') && ((sender as TextBox).Text.Contains('.') || (sender as TextBox).Text.Contains(',')))
+            {
+                e.Handled = true;
+            }
+        }       
     }
 }
