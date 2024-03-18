@@ -146,9 +146,9 @@ namespace dochazkovy_system
             {
                 writer.WriteLine($"Mzda za mesic: {selectedMonth}");
                 writer.WriteLine($"Zamestnanec: {selectedEmployee}");
-                writer.WriteLine($"Odpracovane hodiny:{hoursWorked}");
-                writer.WriteLine($"Hodinova sazba:{hourlyRate}");
-                writer.WriteLine($"Mzda:{salary}");
+                writer.WriteLine($"Odpracovane hodiny: {hoursWorked}");
+                writer.WriteLine($"Hodinova sazba: {hourlyRate} Kč");
+                writer.WriteLine($"Mzda: {salary} Kč");
             }
 
             MessageBox.Show($"Soubor úspěšně uložen", "Export dokončen", MessageBoxButtons.OK, MessageBoxIcon.Information);

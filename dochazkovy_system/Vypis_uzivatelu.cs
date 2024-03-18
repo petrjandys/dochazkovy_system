@@ -2,13 +2,14 @@
 using System.Windows.Forms;
 using System.Data;
 using System.Data.SQLite;
+using System.Collections.Generic;
 
 namespace dochazkovy_system
 {
     public partial class Vypis_uzivatelu : Form
     {
         private SQLiteConnection sqliteConnection;
-        private DataTable dataTable; // DataTable pro ukládání dat
+        private DataTable dataTable; 
 
         public Vypis_uzivatelu()
         {
@@ -16,15 +17,34 @@ namespace dochazkovy_system
             sqliteConnection = new SQLiteConnection("Data Source=dochazkovy_system.db;Version=3;");
             sqliteConnection.Open();
             LoadUsersData();
+            HeadersNames();
+        }
+        private void HeadersNames()
+        {           
+            Dictionary<string, string> translatedHeaders = new Dictionary<string, string>
+            {
+                { "FirstName", "Jméno" },
+                { "LastName", "Příjmení" },
+                { "HourlyRate", "Hodinovka" },
+                { "HoursWorked", "Odpracováno" },
+                { "Position", "Pozice" }
+            };
+            
+            foreach (DataGridViewColumn column in dataGridView1.Columns)
+            {
+                if (translatedHeaders.ContainsKey(column.Name))
+                {
+                    column.HeaderText = translatedHeaders[column.Name];
+                }
+            }
         }
 
         private void LoadUsersData()
         {
-            string query = "SELECT ID, FirstName, LastName, HourlyRate, HoursWorked, Position FROM Employees"; // Upřesněte sloupce, které chcete zobrazit
+            string query = "SELECT ID, FirstName, LastName, HourlyRate, HoursWorked, Position FROM Employees"; 
             dataTable = LoadDataFromSQLite(query);
             dataGridView1.DataSource = dataTable;
-
-            // Skryj sloupec ID
+           
             dataGridView1.Columns["ID"].Visible = false;
         }
 
@@ -48,7 +68,7 @@ namespace dochazkovy_system
                 DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
                 string columnName = dataGridView1.Columns[e.ColumnIndex].Name;
                 string newValue = row.Cells[e.ColumnIndex].Value.ToString();
-                int id = Convert.ToInt32(row.Cells["ID"].Value); // Předpokládám, že sloupec ID existuje
+                int id = Convert.ToInt32(row.Cells["ID"].Value); 
                 UpdateData(id, columnName, newValue);
             }
         }
@@ -103,7 +123,6 @@ namespace dochazkovy_system
             sqliteConnection.Close();
         }
 
-        // button pro smazani - smaze i jeho zaznamy o dochazce
         private void vymazButton_Click(object sender, EventArgs e)
         {
             if (dataGridView1.SelectedRows.Count > 0)
