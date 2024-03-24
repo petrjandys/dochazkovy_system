@@ -205,10 +205,10 @@ namespace dochazkovy_system
                 Application.Exit();
             }
         }
-
         private void zavritToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
+
+        }      
     }
 }

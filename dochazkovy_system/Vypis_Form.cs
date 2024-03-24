@@ -78,7 +78,7 @@ namespace dochazkovy_system
                     label10.Text = selectedEmployee;
                     label9.Text = selectedMonth;
                     label8.Text = hoursWorked.ToString();
-                    label7.Text = hourlyRate.ToString() + "Kč";
+                    label7.Text = hourlyRate.ToString() + " Kč";
                     label6.Text = salary.ToString() + " Kč";
                 }
                 else
