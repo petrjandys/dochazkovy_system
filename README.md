@@ -1,0 +1,1 @@
+The project was made by Janda for the subject Basics of Programming at the Higher Vocational School in Pilsen. It is a desktop application developed in C# using SQLite database for managing employee attendance. The application allows users to register new employees, track their arrivals and departures, and generate monthly attendance reports.
