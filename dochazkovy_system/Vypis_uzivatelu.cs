@@ -8,7 +8,7 @@ namespace dochazkovy_system
     public partial class Vypis_uzivatelu : Form
     {
         private SQLiteConnection sqliteConnection;
-        private DataTable dataTable; // DataTable pro ukládání dat
+        private DataTable dataTable;
 
         public Vypis_uzivatelu()
         {
@@ -16,15 +16,22 @@ namespace dochazkovy_system
             sqliteConnection = new SQLiteConnection("Data Source=dochazkovy_system.db;Version=3;");
             sqliteConnection.Open();
             LoadUsersData();
+            HeaderToCzech();
+        }
+        private void HeaderToCzech()
+        {
+            dataGridView1.Columns["FirstName"].HeaderText = "Jméno";
+            dataGridView1.Columns["LastName"].HeaderText = "Příjmení";
+            dataGridView1.Columns["HourlyRate"].HeaderText = "Hodinovka";
+            dataGridView1.Columns["HoursWorked"].HeaderText = "Odpracováno";
+            dataGridView1.Columns["Position"].HeaderText = "Pozice";
         }
 
         private void LoadUsersData()
         {
             string query = "SELECT ID, FirstName, LastName, HourlyRate, HoursWorked, Position FROM Employees"; // Upřesněte sloupce, které chcete zobrazit
             dataTable = LoadDataFromSQLite(query);
-            dataGridView1.DataSource = dataTable;
-
-            // Skryj sloupec ID
+            dataGridView1.DataSource = dataTable;            
             dataGridView1.Columns["ID"].Visible = false;
         }
 
