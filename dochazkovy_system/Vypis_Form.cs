@@ -57,34 +57,46 @@ namespace dochazkovy_system
         }
         private void zobrazitButton_Click(object sender, EventArgs e)
         {
+            if (zamestnanecCombo.SelectedItem == null || mesicCombo.SelectedItem == null)
+            {
+                MessageBox.Show("Prosím vyberte zaměstnance a měsíc.", "Upozornění", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             string selectedEmployee = zamestnanecCombo.SelectedItem.ToString();
             string selectedMonth = mesicCombo.SelectedItem.ToString();
             string[] nameParts = selectedEmployee.Split(' ');
             string firstName = nameParts[0];
             string lastName = nameParts[1];
-            string selectHoursWorkedQuery = "SELECT HoursWorked FROM Employees WHERE FirstName = @FirstName AND LastName = @LastName";
+            string selectedMonthNumber = DateTime.ParseExact(selectedMonth, "MMMM", CultureInfo.CurrentCulture).Month.ToString("00");
+
+            string selectHoursWorkedQuery = "SELECT HoursWorked FROM Attendance " +
+                                            "INNER JOIN Employees ON Attendance.EmployeeID = Employees.ID " +
+                                            "WHERE Employees.FirstName = @FirstName AND Employees.LastName = @LastName " +
+                                            "AND strftime('%m', Attendance.ArrivalTime) = @SelectedMonth";
+
             using (SQLiteCommand selectHoursWorkedCommand = new SQLiteCommand(selectHoursWorkedQuery, sqliteConnection))
             {
                 selectHoursWorkedCommand.Parameters.AddWithValue("@FirstName", firstName);
                 selectHoursWorkedCommand.Parameters.AddWithValue("@LastName", lastName);
+                selectHoursWorkedCommand.Parameters.AddWithValue("@SelectedMonth", selectedMonthNumber);
                 object result = selectHoursWorkedCommand.ExecuteScalar();
+
+                double hoursWorked = 0;
 
                 if (result != null)
                 {
-                    double hoursWorked = Convert.ToDouble(result);
-                    double hourlyRate = GetHourlyRate(firstName, lastName);
-                    double salary = hoursWorked * hourlyRate;
+                    hoursWorked = Convert.ToDouble(result);
+                }
 
-                    label10.Text = selectedEmployee;
-                    label9.Text = selectedMonth;
-                    label8.Text = hoursWorked.ToString();
-                    label7.Text = hourlyRate.ToString() + " Kč";
-                    label6.Text = salary.ToString() + " Kč";
-                }
-                else
-                {
-                    MessageBox.Show("Odpracované hodiny pro vybraného zaměstnance a měsíc nejsou k dispozici.", "Upozornění", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                double hourlyRate = GetHourlyRate(firstName, lastName);
+                double salary = hoursWorked * hourlyRate;
+
+                label10.Text = selectedEmployee;
+                label9.Text = selectedMonth;
+                label8.Text = hoursWorked.ToString();
+                label7.Text = hourlyRate.ToString() + " Kč";
+                label6.Text = salary.ToString() + " Kč";
             }
         }
         private double GetHourlyRate(string firstName, string lastName)
